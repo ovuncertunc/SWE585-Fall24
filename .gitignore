@@ -1,0 +1,72 @@
+# This .gitignore file is for Unity projects
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# User-specific files
+userprefs
+*.swp
+*.swo
+*.tmp
+
+# Unity generated files #
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+
+# Auto-generated VS/MD/VSCode files #
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.aab
+*.xcodeproj
+*.xcworkspace
+*.xcuserdata/
+*.build/
+
+# Crashlytics generated files
+crashlytics-build.properties
+fabric.properties
+
+# Gradle files
+.gradle/
+*.gradle
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+!/[Aa]ssets/**/*.meta
+
+# Uncomment this line if you have Vuforia files in your project
+# Vuforia/
+
+# Uncomment this line if you use Unity Cache Server
+# [Cc]ache/
+
+# IDE generated files #
+.idea/
+
