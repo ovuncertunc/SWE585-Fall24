@@ -4,8 +4,9 @@ public class ParticleForce : MonoBehaviour
 {
     public ParticleSystem water; // Reference to the water particle system
     public Transform bucket; // Reference to the bucket GameObject
-    public float forceMultiplier = 1f; // Force multiplier for applied forces
+    public float forceMultiplier = 10f; // Force multiplier for applied forces
     public float moveSpeed = 5f; // Speed at which the bucket moves
+    public float interactionRange = 2f; // Distance threshold for force application
     public KeyCode emitKey = KeyCode.Space; // Key to trigger particle emission
     public bool toggleMode = true; // Set to true for toggle, false for single burst
 
@@ -14,7 +15,7 @@ public class ParticleForce : MonoBehaviour
 
     void Start()
     {
-        // Find all objects above ground by checking for a specific tag or rigidbody
+        // Find all rigidbodies with a specific tag
         GameObject[] objects = GameObject.FindGameObjectsWithTag("AboveGround");
         aboveGroundObjects = new Rigidbody[objects.Length];
         for (int i = 0; i < objects.Length; i++)
@@ -30,7 +31,6 @@ public class ParticleForce : MonoBehaviour
         {
             if (toggleMode)
             {
-                // Toggle the particle system on or off
                 if (isEmitting)
                 {
                     water.Stop();
@@ -44,7 +44,6 @@ public class ParticleForce : MonoBehaviour
             }
             else
             {
-                // Emit particles as a single burst
                 water.Emit(50); // Emit 50 particles (adjust as needed)
             }
         }
@@ -52,39 +51,41 @@ public class ParticleForce : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Handle bucket movement with arrow keys or WASD
+        // Handle bucket movement
         if (bucket != null)
         {
             HandleMovement();
         }
 
-        if (water == null || aboveGroundObjects == null || aboveGroundObjects.Length == 0) return;
+        // if (water == null || aboveGroundObjects == null) return;
 
-        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[water.particleCount];
-        int count = water.GetParticles(particles);
+        // // Get particles
+        // ParticleSystem.Particle[] particles = new ParticleSystem.Particle[water.particleCount];
+        // int count = water.GetParticles(particles);
 
-        for (int i = 0; i < count; i++)
-        {
-            Vector3 particlePosition = particles[i].position + water.transform.position;
+        // for (int i = 0; i < count; i++)
+        // {
+        //     // Convert particle data to world space
+        //     Vector3 particleWorldPosition = water.transform.TransformPoint(particles[i].position);
+        //     Vector3 particleWorldVelocity = water.transform.TransformVector(particles[i].velocity);
 
-            // Loop through all rigidbodies above ground and apply force
-            foreach (Rigidbody obj in aboveGroundObjects)
-            {
-                if (obj == null) continue;
+        //     foreach (Rigidbody obj in aboveGroundObjects)
+        //     {
+        //         if (obj == null) continue;
 
-                Vector3 directionToObj = obj.position - particlePosition;
-                float distanceToObj = directionToObj.magnitude;
+        //         float distanceToParticle = Vector3.Distance(obj.position, particleWorldPosition);
 
-                if (distanceToObj < 2f) // Adjust this range as needed
-                {
-                    Vector3 forceToObj = directionToObj.normalized / (distanceToObj * distanceToObj) * forceMultiplier;
-                    obj.AddForce(forceToObj, ForceMode.Force);
-                }
-            }
-        }
+        //         if (distanceToParticle < interactionRange)
+        //         {
+        //             // Apply force in the direction of the particle's velocity
+        //             Vector3 forceDirection = particleWorldVelocity.normalized;
+        //             Vector3 force = forceDirection * forceMultiplier;
 
-        // Update particles in the particle system
-        water.SetParticles(particles, count);
+        //             obj.AddForce(force, ForceMode.Force);
+        //             Debug.Log($"Force applied to {obj.gameObject.name}: {force}");
+        //         }
+        //     }
+        // }
     }
 
     void HandleMovement()
